@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en-US" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ block "title" . }}{{ .Site.Title }}{{ end }}</title>
+    {{ block "head" . }}{{ end }}
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    {{ partialCached "manifest.html" . }}
+    {{ $fonts := resources.Get "css/fonts.css" | resources.Minify}}
+    {{ $main := resources.Get "css/main.css" | resources.Minify}}
+    {{- $stylesheetfonts := $fonts | fingerprint }}
+    {{- $stylesheetmain := $main | fingerprint }}
+    <link rel="preload" as="style" href="{{ $stylesheetmain.Permalink }}">
+    <link rel="stylesheet" href="{{ $stylesheetfonts.Permalink }}">
+    <link rel="stylesheet" href="{{ $stylesheetmain.Permalink }}">
+    <link rel="preload" as="script" href="https://cdn.jsdelivr.net/npm/vue@3.2.37/dist/vue.global.prod.js">
+    <link rel="preload" as="script" href="https://cdn.jsdelivr.net/npm/quasar@2.7.1/dist/quasar.umd.prod.js">
+    <script defer src="https://cdn.jsdelivr.net/npm/vue@3.2.37/dist/vue.global.prod.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/quasar@2.7.1/dist/quasar.umd.prod.js"></script>
+    {{ $built := resources.Get "js/index.js" | js.Build "js/main.js" | fingerprint | minify }}
+    <script defer src="{{ $built.Permalink }}"></script>
+</head>
+<body>
+    <div id="q-app"></div>
+    {{ block "main" . }}{{ end }}
+    {{ block "footer" . }}{{ end }}
+</body>
+</html>

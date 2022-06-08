@@ -1,0 +1,19 @@
+baseURL = 'https://r-insight.com/'
+languageCode = 'en-us'
+title = 'R-Insight'
+disableHugoGeneratorInject = true
+paginate = 15
+pluralizeListTitles = false
+
+[params]
+    adsense-ad-client= 'ca-pub-XXXXXXXXXX'
+    imageserver = 'https://i.imgur.com/'
+
+[minify]
+    minifyOutput = true
+
+[taxonomies]
+    author = 'authors'
+    channel = 'channel'
+    interest = 'interest'
+    tag = 'tags'

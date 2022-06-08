@@ -1,0 +1,33 @@
+<template id="layout">
+    <q-layout view="hHh LpR fFf">
+    <q-header bordered :class="$q.dark.isActive ? 'bg-dark text-white' : 'bg-white text-dark'">
+      <q-toolbar>
+        <q-btn dense flat round icon="menu" @click="toggleLeftDrawer"></q-btn>
+
+        <q-toolbar-title>
+          <q-avatar>
+            <img src="/icons/icon.svg">
+          </q-avatar>
+        </q-toolbar-title>
+        <q-btn dense flat round icon="menu" @click="$q.dark.toggle()"></q-btn>
+        <q-btn dense flat round icon="menu" @click="toggleRightDrawer"></q-btn>
+      </q-toolbar>
+    </q-header>
+
+    <q-drawer show-if-above v-model="leftDrawerOpen" side="left" bordered>
+      <!-- drawer content -->
+    </q-drawer>
+
+    <q-drawer show-if-above v-model="rightDrawerOpen" side="right" bordered>
+      <!-- drawer content -->
+    </q-drawer>
+
+    <q-page-container>
+      <page-component></page-component>
+    </q-page-container>
+
+    <q-footer class="bg-transparent text-dark">
+        <div class="text-center"></div>
+    </q-footer>
+  </q-layout>
+</template>

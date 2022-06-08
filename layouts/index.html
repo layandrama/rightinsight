@@ -1,0 +1,53 @@
+{{ define "title" }}{{ .Title  | title }} | {{ .Site.Title }}{{ end }}
+{{ define "main" }}
+<template id="content">
+    <q-page padding style="padding-bottom: 50px;">
+        {{.Content}}
+        {{ $targetPage := where .Site.RegularPages.ByLastmod.Reverse "Type" "article" }}
+        {{ $paginator := .Paginate $targetPage }}
+        {{ range $paginator.Pages }}
+        <article class="relative-position">
+            <div class="row">
+                <div class="col-12 col-md-7 q-pa-sm">
+                    <h1 class="h5 q-mb-sm gt-sm relative-position">{{.Title | title}}<a href="{{.Permalink}}" style="z-index: 2;" class="absolute-full" aria-label="read more"></a></h1>
+                    <q-item-label :lines="3" class="q-mb-sm gt-sm non-selectable">{{.Params.description | markdownify}}</q-item-label>
+                    <div>
+                        <q-breadcrumbs separator="" style="font-size: 12px;" gutter="xs">
+                            {{ with .Params.interest}}
+                            {{- with $.Site.GetPage "taxonomyTerm" (printf "interest/%s" (urlize .)) }}
+                            <q-breadcrumbs-el href="{{.Permalink}}" class="text-weight-bold" style="color: inherit;" label="{{.Title | upper}}"></q-breadcrumbs-el>{{end}}{{end}}
+                            {{ range .Params.channel}}
+                            {{- with $.Site.GetPage "taxonomyTerm" (printf "channel/%s" (urlize .)) }}
+                            <q-breadcrumbs-el href="{{.Permalink}}" style="color: inherit;" label="{{.Title | title}}"></q-breadcrumbs-el>{{end}}{{end}}
+                            {{ range .Params.tags}}
+                            {{- with $.Site.GetPage "taxonomyTerm" (printf "tags/%s" (urlize .)) }}
+                            <q-breadcrumbs-el href="{{.Permalink}}" style="color: inherit;" label="{{ .Title | title}}"></q-breadcrumbs-el>{{end}}{{end}}
+                        </q-breadcrumbs>
+                    </div>
+                </div>
+                <div class="col-12 col-md-5 relative-position">
+                    <q-img loading="lazy" no-spinner src="https://i.imgur.com/{{ index (.Params.images) 0 }}" crossorigin="anonymous" :ratio="1200/675">
+                        <template v-slot:loading>
+                            <q-skeleton class="fit" square></q-skeleton>
+                        </template>
+                        <div class="absolute-full text-subtitle2 flex flex-center items-end lt-md">
+                            <div class="absolute-bottom q-pa-sm full-width">
+                                <span class="h5 text-weight-bold">{{.Title | title}}</span>
+                            </div>
+                        </div>
+                    </q-img>
+                    <a href="{{.Permalink}}" class="absolute-full" aria-label="read more"></a>
+                </div>
+            </div>
+            
+            
+        </article>
+        <q-separator class="q-my-md"></q-separator>
+        {{ end }}
+        {{ partial "pagination.html" .}}
+        <q-page-scroller position="bottom-right" :scroll-offset="350" :offset="[18, 18]">
+            <q-btn fab-mini glossy icon="keyboard_arrow_up" :color="$q.dark.isActive ? 'white' : 'dark'" :text-color="$q.dark.isActive ? 'dark' : 'white'"></q-btn>
+        </q-page-scroller>
+    </q-page>
+</template>
+{{ end }}

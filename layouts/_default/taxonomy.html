@@ -1,0 +1,40 @@
+{{ define "title" }}{{ .Title  | title }} | {{ .Site.Title }}{{ end }}
+{{ define "main" }}
+<template id="content">
+    <q-page padding style="padding-bottom: 50px;">
+        <h1>{{ .Title | title }}</h1>
+        {{ with .Params.description}}<p>{{.}}</p>{{ end }}
+        <q-separator class="q-mb-lg"></q-separator>
+        {{ range .Paginator.Pages }}
+            
+        <article class="relative-position q-mb-md">
+            <div class="row">
+                <div class="col-12 col-md-7 q-pa-sm gt-sm">
+                    <h1 class="h5">{{.Title | title}}</h1>
+                    <q-item-label :lines="3">{{.Params.description | markdownify}}</q-item-label>                    
+                </div>
+                {{ with .Params.images }}<div class="col-12 col-md-5">
+                    <q-img loading="lazy" no-spinner src="https://i.imgur.com/{{ index . 0 }}" crossorigin="anonymous" :ratio="1200/675">
+                        <template v-slot:loading>
+                            <q-skeleton class="fit" square></q-skeleton>
+                        </template>
+                        <div class="absolute-full text-subtitle2 flex flex-center items-end lt-md">
+                            <div class="absolute-bottom q-pa-sm full-width">{{ end }}
+                                <span class="h5 text-weight-bold">{{.Title | title}}</span>
+                                {{ with .Params.images }}</div>
+                        </div>
+                    </q-img>
+                </div>{{ end }}
+            </div>
+            
+            <a href="{{.Permalink}}" class="absolute-full" aria-label="read more"></a>
+        </article>
+        {{ end }}
+        {{ partial "pagination.html" .}}
+        {{.Content}}
+        <q-page-scroller position="bottom-right" :scroll-offset="350" :offset="[18, 18]">
+            <q-btn fab-mini glossy icon="keyboard_arrow_up" :color="$q.dark.isActive ? 'white' : 'dark'" :text-color="$q.dark.isActive ? 'dark' : 'white'" aria-label="back to top"></q-btn>
+        </q-page-scroller>
+    </q-page>
+</template>
+{{ end }}

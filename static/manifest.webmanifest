@@ -1,0 +1,37 @@
+{
+    "name": "r-insight",
+    "short_name": "r-insight",
+    "start_url": "/",
+    "display": "standalone",
+    "orientation": "portrait",
+    "background_color": "#FFCC66",
+    "theme_color": "white",
+    "icons": [
+      {
+        "src": "/icons/icon-192px.png",
+        "sizes": "192x192",
+        "type": "image/png"
+      },
+      {
+        "src": "/icons/maskable_icon-192px.png",
+        "sizes": "192x192",
+        "type": "image/png",
+        "purpose": "maskable"
+      },
+      {
+        "src": "/icons/icon-512px.png",
+        "sizes": "512x512",
+        "type": "image/png"
+      }
+    ],
+    "description": "Critical thinking and beyond. For professionals to make critical decisions on business, carrier, financial and health.",
+    "lang": "en",
+    "categories": ["education", "news","investment","health","books"],
+    "screenshots": [
+      {
+        "src": "/icons/540x720.png",
+        "sizes": "540x720",
+        "type": "image/png"
+      }
+    ]
+  }

@@ -1,0 +1,104 @@
+{{ define "title" }}{{ .Title  | title }} | {{ .Site.Title }}{{ end }}
+{{ define "head" }}
+{{- with $.Params.images }}<link rel="preload" as="image" href="https://i.imgur.com/{{ index . 0 }}" crossorigin="anonymous">{{ end }}
+{{- $iso8601 := "2006-01-02T15:04:05-07:00" -}}
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "NewsArticle",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "{{.Permalink}}"
+    },
+    "isFamilyFriendly": "true",
+    "headline": "{{.Title | title}}",
+    "genre" : [ {{ range $index, $tag := .Params.tags }}{{ if $index }}, {{ end }}"{{ $tag }}" {{ end }}],
+    "wordCount" : "{{ .WordCount }}",
+    "image": {{ if .Params.images }}[{{ range $i, $e := .Params.images }}{{ if $i }}, {{ end }}{{ $e | printf "https://i.imgur.com/%s" }}{{ end }}]{{ else}}{{.Site.Params.logo | absURL }}{{ end }},
+    "datePublished": "{{ .PublishDate.Format "2006-01-02T15:04:05.00Z" | safeHTML }}",
+    "dateModified": "{{ .Lastmod.Format "2006-01-02T15:04:05.00Z" | safeHTML }}",
+    "author": [
+    {{- range $index,$author := .Params.authors }}
+        {{- with $.Site.GetPage "taxonomyTerm" (printf "authors/%s" (urlize .)) -}}
+        {{- if $index }}, {{ end -}}
+    { 
+      "@type" : "Person",
+      "name":"{{.Params.title |title}}",
+      "url":"{{.Permalink}}" 
+    }
+        {{- end -}}
+    {{- end -}}
+    ],
+    "publisher": {
+      "@type": "Organization",
+      "name": "Rezzamula",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https:\/\/rezzamula.com\/icons\/amp.png"
+      }
+    }
+  }
+</script>
+{{ end }}
+{{ define "main" }}
+<template id="content">
+    <q-page padding style="padding-bottom: 50px;">
+        <article>
+            {{ with .Params.images }}
+            <figure class="qpage-nopadding q-nopadding-top">
+                <q-img no-spinner loading="eager" src="https://i.imgur.com/{{ index . 0 }}" crossorigin="anonymous" :ratio="1200/675">
+                    <template v-slot:loading>
+                        <q-skeleton class="fit" square></q-skeleton>
+                    </template>
+                    <template v-slot:error>
+                        <div class="absolute-full flex flex-center bg-negative text-white">
+                          Cannot load image
+                        </div>
+                    </template>
+                </q-img>{{ end }}
+                {{ with .Params.caption}}<figcaption class="text-caption text-right q-layout-padding q-py-none">{{.}}</figcaption>{{end}}
+                {{ with .Params.images }}</figure>{{ end }}
+            <h1>{{.Title | title}}</h1>
+
+            <q-breadcrumbs separator="." style="font-size: 14px;" gutter="xs" class="q-mb-lg">
+            {{ with .Params.interest}}
+            {{- with $.Site.GetPage "taxonomyTerm" (printf "interest/%s" (urlize .)) }}
+            <q-breadcrumbs-el href="{{.Permalink}}" class="text-weight-bold" style="color: inherit;" label="{{.Title | upper}}"></q-breadcrumbs-el>{{end}}{{end}}
+            {{ range .Params.channel}}
+            {{- with $.Site.GetPage "taxonomyTerm" (printf "channel/%s" (urlize .)) }}
+            <q-breadcrumbs-el href="{{.Permalink}}" style="color: inherit;" label="{{.Title | title}}"></q-breadcrumbs-el>{{end}}{{end}}
+            {{ range .Params.tags}}
+            {{- with $.Site.GetPage "taxonomyTerm" (printf "tags/%s" (urlize .)) }}
+            <q-breadcrumbs-el href="{{.Permalink}}" style="color: inherit;" label="{{ .Title | title}}"></q-breadcrumbs-el>{{end}}{{end}}
+            </q-breadcrumbs>
+            {{ partialCached "ads.html" . }}
+        {{.Content}}
+        <p><strong>Publication Date:</strong><em><time class="op-modified" dateTime="{{.Lastmod.Format "2006-01-02T15:04:05Z0700"}}"> {{ .Lastmod.Format "02 Jan 2006" }}</time></em></p>
+        </article>
+
+        <q-page-sticky position="bottom-left" :offset="[18, 18]">
+          <q-fab padding="sm" icon="share" direction="up" :color="$q.dark.isActive ? 'white' : 'dark'" :text-color="$q.dark.isActive ? 'dark' : 'white'" aria-label="share">
+            <q-fab-action aria-label="share facebook" flat :color="$q.dark.isActive ? 'white' : 'dark'" @click="open('https://www.facebook.com/sharer.php?u={{.Permalink}}')" :text-color="$q.dark.isActive ? 'dark' : 'white'">
+              <q-avatar size="42px">
+                <q-img no-spinner src="/icons/facebook.svg" alt="facebook"></q-img>
+              </q-avatar>
+            </q-fab-action>
+            <q-fab-action aria-label="share twitter" flat :color="$q.dark.isActive ? 'white' : 'dark'" @click="open('https://twitter.com/share?url={{.Permalink}}&text={{.Title|title}}')" :text-color="$q.dark.isActive ? 'dark' : 'white'">
+              <q-avatar size="42px">
+                <q-img no-spinner src="/icons/twitter.webp" alt="twitter"></q-img>
+              </q-avatar>
+            </q-fab-action>
+            <!-- <q-fab-action aria-label="share linkedin" flat :color="$q.dark.isActive ? 'white' : 'dark'" @click="open('https://www.linkedin.com/sharing/share-offsite/?url={{.Permalink}}')" :text-color="$q.dark.isActive ? 'dark' : 'white'">
+              <q-avatar size="42px">
+                <q-img no-spinner src="/icons/linkedin.svg" alt="linkedin"></q-img>
+              </q-avatar>
+            </q-fab-action> -->
+            <q-fab-action :color="$q.dark.isActive ? 'white' : 'grey'" @click="copy('{{.Permalink}}')" :text-color="$q.dark.isActive ? 'dark' : 'white'" icon="link"></q-fab-action>
+          </q-fab>
+        </q-page-sticky>
+        <q-page-scroller position="bottom-right" :scroll-offset="350" :offset="[18, 18]">
+            <q-btn fab-mini glossy icon="keyboard_arrow_up" :color="$q.dark.isActive ? 'white' : 'dark'" :text-color="$q.dark.isActive ? 'dark' : 'white'" aria-label="back to top"></q-btn>
+        </q-page-scroller>
+    </q-page>
+</template>
+{{ end }}
