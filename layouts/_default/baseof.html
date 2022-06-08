@@ -85,8 +85,13 @@
     <meta itemprop="keywords" content="{{ if .IsPage}}{{ range $index, $tag := .Params.tags }}{{ $tag }},{{ end }}{{ else }}{{ range $plural, $terms := .Site.Taxonomies }}{{ range $term, $val := $terms }}{{ printf "%s," $term }}{{ end }}{{ end }}{{ end }}" />
     {{- end -}}
     {{ block "head" . }}{{ end }}
-    <link rel="preconnect" href="https://cdn.jsdelivr.net">
-    <link rel="preconnect" href="https://i0.wp.com">
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin="anonymous">
+    <link rel="preconnect" href="https://i0.wp.com" crossorigin="anonymous">
+    <link rel="preconnect" href="https://pagead2.googlesyndication.com/" crossorigin="anonymous">
+    <link rel="preconnect" href="https://tpc.googlesyndication.com/" crossorigin="anonymous">
+    <link rel="preconnect" href="https://adservice.google.com/" crossorigin="anonymous">
+    <link rel="preconnect" href="https://googleads.g.doubleclick.net/"  crossorigin="anonymous">
+    <link rel="preconnect" href="https://www.googletagservices.com/"  crossorigin="anonymous">
     {{ partialCached "manifest.html" . }}
     {{ $fonts := resources.Get "css/fonts.css" | resources.Minify}}
     {{ $main := resources.Get "css/main.css" | resources.Minify}}
@@ -101,6 +106,9 @@
     <script defer src="https://cdn.jsdelivr.net/npm/quasar@2.7.1/dist/quasar.umd.prod.js"></script>
     {{ $built := resources.Get "js/index.js" | js.Build "js/main.js" | fingerprint | minify }}
     <script defer src="{{ $built.Permalink }}"></script>
+    {{ if hugo.IsProduction }}
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8887263260016839" crossorigin="anonymous"></script>
+    {{ end }}
 </head>
 <body>
     <div id="q-app"></div>
