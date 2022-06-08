@@ -1,6 +1,5 @@
 {{ define "title" }}{{ .Title  | title }} | {{ .Site.Title }}{{ end }}
 {{ define "head" }}
-{{- with $.Params.images }}<link rel="preload" as="image" href="https://i.imgur.com/{{ index . 0 }}" crossorigin="anonymous">{{ end }}
 {{- $iso8601 := "2006-01-02T15:04:05-07:00" -}}
 <script type="application/ld+json">
   {
@@ -14,7 +13,7 @@
     "headline": "{{.Title | title}}",
     "genre" : [ {{ range $index, $tag := .Params.tags }}{{ if $index }}, {{ end }}"{{ $tag }}" {{ end }}],
     "wordCount" : "{{ .WordCount }}",
-    "image": {{ if .Params.images }}[{{ range $i, $e := .Params.images }}{{ if $i }}, {{ end }}{{ $e | printf "https://i.imgur.com/%s" }}{{ end }}]{{ else}}{{.Site.Params.logo | absURL }}{{ end }},
+    "image": {{ if .Params.images }}[{{ range $i, $e := .Params.images }}{{ if $i }}, {{ end }}{{ $e | printf "https://r-insight.com/img/%s" }}{{ end }}]{{ else}}{{.Site.Params.logo | absURL }}{{ end }},
     "datePublished": "{{ .PublishDate.Format "2006-01-02T15:04:05.00Z" | safeHTML }}",
     "dateModified": "{{ .Lastmod.Format "2006-01-02T15:04:05.00Z" | safeHTML }}",
     "author": [
@@ -46,7 +45,7 @@
         <article>
             {{ with .Params.images }}
             <figure class="qpage-nopadding q-nopadding-top">
-                <q-img no-spinner loading="eager" src="https://i.imgur.com/{{ index . 0 }}" crossorigin="anonymous" :ratio="1200/675">
+                <q-img no-spinner loading="eager" src="https://i0.wp.com/r-insight.com/img/{{ index . 0 }}" srcset="https://i0.wp.com/r-insight.com/img/{{ index . 0 }}?w=780 780w" sizes="(min-width: 830px) 780px, 100vw" crossorigin="anonymous" :ratio="1200/675">
                     <template v-slot:loading>
                         <q-skeleton class="fit" square></q-skeleton>
                     </template>

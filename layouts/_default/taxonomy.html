@@ -14,7 +14,7 @@
                     <q-item-label :lines="3">{{.Params.description | markdownify}}</q-item-label>                    
                 </div>
                 {{ with .Params.images }}<div class="col-12 col-md-5">
-                    <q-img loading="lazy" no-spinner src="https://i.imgur.com/{{ index . 0 }}" crossorigin="anonymous" :ratio="1200/675">
+                    <q-img no-spinner loading="eager" src="https://i0.wp.com/r-insight.com/img/{{ index . 0 }}" srcset="https://i0.wp.com/r-insight.com/img/{{ index . 0 }}?w=780 780w" sizes="(min-width: 830px) 780px, 100vw" crossorigin="anonymous" :ratio="1200/675">
                         <template v-slot:loading>
                             <q-skeleton class="fit" square></q-skeleton>
                         </template>

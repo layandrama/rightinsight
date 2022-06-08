@@ -4,9 +4,89 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="google-site-verification" content="i6hrpIF9DiX-Mw98hiGy3uGhd6ccHHCIGlQicTdyG9s"/>
     <title>{{ block "title" . }}{{ .Site.Title }}{{ end }}</title>
+    <meta name="description" content="{{ with .Description }}{{ . }}{{ else }}{{if .IsPage}}{{ .Summary }}{{ else }}{{ with .Site.Params.description }}{{ . }}{{ end }}{{ end }}{{ end }}">
+    <meta property="og:title" content="{{ .Title }}" />
+    <meta property="og:description" content="{{ with .Description }}{{ . }}{{ else }}{{if .IsPage}}{{ .Summary }}{{ else }}{{ with .Site.Params.description }}{{ . }}{{ end }}{{ end }}{{ end }}" />
+    <meta property="og:type" content="{{ if .IsPage }}article{{ else }}website{{ end }}" />
+    <meta property="og:url" content="{{ .Permalink }}" />
+    <meta itemprop="name" content="{{ .Title }}">
+    <meta itemprop="description" content="{{ with .Description }}{{ . }}{{ else }}{{if .IsPage}}{{ .Summary }}{{ else }}{{ with .Site.Params.description }}{{ . }}{{ end }}{{ end }}{{ end }}">
+    {{- with $.Params.images -}}
+    {{- range first 6 . }}<meta property="og:image" content="{{ . | printf "https://r-insight.com/img/%s" }}" />{{ end -}}
+    {{- else -}}
+    {{- $images := $.Resources.ByType "image" -}}
+    {{- $featured := $images.GetMatch "*feature*" -}}
+    {{- if not $featured }}{{ $featured = $images.GetMatch "{*cover*,*thumbnail*}" }}{{ end -}}
+    {{- with $featured -}}
+    <meta property="og:image" content="{{ $featured.Permalink }}"/>
+    {{- else -}}
+    {{- with $.Site.Params.images }}<meta property="og:image" content="{{ index . 0 }}"/>{{ end -}}
+    {{- end -}}
+    {{- end -}}
+    {{- if .IsPage }}
+    {{- $iso8601 := "2006-01-02T15:04:05.00Z" -}}
+    <meta property="article:section" content="{{ .Section }}" />
+    {{ with .PublishDate }}<meta property="article:published_time" {{ .Format $iso8601 | printf "content=%q" | safeHTMLAttr }} />{{ end }}
+    {{ with .Lastmod }}<meta property="article:modified_time" {{ .Format $iso8601 | printf "content=%q" | safeHTMLAttr }} />{{ end }}
+    {{- end -}}
+
+    {{- with .Params.audio }}<meta property="og:audio" content="{{ . }}" />{{ end }}
+    {{- with .Params.locale }}<meta property="og:locale" content="{{ . }}" />{{ end }}
+    {{- with .Site.Params.title }}<meta property="og:site_name" content="{{ . }}" />{{ end }}
+    {{- with .Params.videos }}{{- range . }}
+    <meta property="og:video" content="{{ . | absURL }}" />
+    {{ end }}{{ end }}
+    {{- with $.Params.images -}}
+    <meta name="twitter:card" content="summary_large_image"/>
+    <meta name="twitter:image" content="{{ index . 0 | printf "https://r-insight.com/img/%s" }}"/>
+    {{ else -}}
+    {{- $images := $.Resources.ByType "image" -}}
+    {{- $featured := $images.GetMatch "*feature*" -}}
+    {{- if not $featured }}{{ $featured = $images.GetMatch "{*cover*,*thumbnail*}" }}{{ end -}}
+    {{- with $featured -}}
+    <meta name="twitter:card" content="summary_large_image"/>
+    <meta name="twitter:image" content="{{ $featured.Permalink }}"/>
+    {{- else -}}
+    {{- with $.Site.Params.images -}}
+    <meta name="twitter:card" content="summary_large_image"/>
+    <meta name="twitter:image" content="{{ index . 0  }}"/>
+    {{ else -}}
+    <meta name="twitter:card" content="summary"/>
+    {{- end -}}
+    {{- end -}}
+    {{- end }}
+    <meta name="twitter:title" content="{{ .Title }}"/>
+    <meta name="twitter:description" content="{{ with .Description }}{{ . }}{{ else }}{{if .IsPage}}{{ .Summary }}{{ else }}{{ with .Site.Params.description }}{{ . }}{{ end }}{{ end }}{{ end -}}"/>
+    {{ with .Site.Social.twitter -}}
+    <meta name="twitter:site" content="@{{ . }}"/>
+    {{ end -}}
+    {{- if .IsPage -}}
+    {{- $iso8601 := "2006-01-02T15:04:05.00Z" -}}
+    {{ with .PublishDate }}<meta itemprop="datePublished" {{ .Format $iso8601 | printf "content=%q" | safeHTMLAttr }} />{{ end}}
+    {{ with .Lastmod }}<meta itemprop="dateModified" {{ .Format $iso8601 | printf "content=%q" | safeHTMLAttr }} />{{ end}}
+    <meta itemprop="wordCount" content="{{ .WordCount }}">
+
+    {{- with $.Params.images -}}
+    {{- range first 6 . -}}<meta itemprop="image" content="{{ . | printf "https://r-insight.com/img/%s" }}">{{ end -}}
+    {{- else -}}
+    {{- $images := $.Resources.ByType "image" -}}
+    {{- $featured := $images.GetMatch "*feature*" -}}
+    {{- if not $featured }}{{ $featured = $images.GetMatch "{*cover*,*thumbnail*}" }}{{ end -}}
+    {{- with $featured -}}
+    <meta itemprop="image" content="{{ $featured.Permalink }}">
+    {{- else -}}
+    {{- with $.Site.Params.images -}}<meta itemprop="image" content="{{ index . 0 }}"/>{{ end -}}
+    {{- end -}}
+    {{- end -}}
+
+    <!-- Output all taxonomies as schema.org keywords -->
+    <meta itemprop="keywords" content="{{ if .IsPage}}{{ range $index, $tag := .Params.tags }}{{ $tag }},{{ end }}{{ else }}{{ range $plural, $terms := .Site.Taxonomies }}{{ range $term, $val := $terms }}{{ printf "%s," $term }}{{ end }}{{ end }}{{ end }}" />
+    {{- end -}}
     {{ block "head" . }}{{ end }}
     <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    <link rel="preconnect" href="https://i0.wp.com">
     {{ partialCached "manifest.html" . }}
     {{ $fonts := resources.Get "css/fonts.css" | resources.Minify}}
     {{ $main := resources.Get "css/main.css" | resources.Minify}}

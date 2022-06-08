@@ -38,7 +38,7 @@ const app = Vue.createApp({
         <q-btn dense flat round icon="menu" @click="toggleLeftDrawer" class="lt-md" aria-label="Menu"></q-btn>
         <q-btn flat no-caps no-wrap stretch href="/" aria-label="Go to Homepage">
           <q-avatar size="42px">
-            <img src="/icons/icon.svg" alt="Logo">
+            <q-img no-spinner src="https://i0.wp.com/r-insight.com/icons/icon-512px.png?w=84" alt="Logo" width="42" height="42"></q-img>
           </q-avatar>
         </q-btn>
         <q-space/>

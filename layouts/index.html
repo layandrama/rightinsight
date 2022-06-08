@@ -26,7 +26,9 @@
                     </div>
                 </div>
                 <div class="col-12 col-md-5 relative-position">
-                    <q-img loading="lazy" no-spinner src="https://i.imgur.com/{{ index (.Params.images) 0 }}" crossorigin="anonymous" :ratio="1200/675">
+                    <q-img loading="lazy" no-spinner src="https://i0.wp.com/r-insight.com/img/{{ index (.Params.images) 0 }}" 
+                    srcset="https://i0.wp.com/r-insight.com/img/{{ index (.Params.images) 0 }}?w=590 590w" sizes="(min-width: 640px) 590px, 100vw"
+                    crossorigin="anonymous" :ratio="1200/675">
                         <template v-slot:loading>
                             <q-skeleton class="fit" square></q-skeleton>
                         </template>
@@ -46,7 +48,7 @@
         {{ end }}
         {{ partial "pagination.html" .}}
         <q-page-scroller position="bottom-right" :scroll-offset="350" :offset="[18, 18]">
-            <q-btn fab-mini glossy icon="keyboard_arrow_up" :color="$q.dark.isActive ? 'white' : 'dark'" :text-color="$q.dark.isActive ? 'dark' : 'white'"></q-btn>
+            <q-btn fab-mini glossy icon="keyboard_arrow_up" :color="$q.dark.isActive ? 'white' : 'dark'" :text-color="$q.dark.isActive ? 'dark' : 'white'" aria-label="back to top"></q-btn>
         </q-page-scroller>
     </q-page>
 </template>
