@@ -10,6 +10,9 @@ pluralizeListTitles = false
     imageserver = 'https://i.imgur.com/'
     images = ["https://r-insight.com/img/gs5D7W9.png"]
 
+[minify]
+    minifyOutput = true
+
 [taxonomies]
     author = 'authors'
     channel = 'channel'

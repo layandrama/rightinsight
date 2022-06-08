@@ -1,4 +1,4 @@
-{{ define "title" }}{{ .Title  | title }} | {{ .Site.Title }}{{ end }}
+{{ define "title" }}{{ .Title  | title | markdownify  }} | {{ .Site.Title }}{{ end }}
 {{ define "head" }}
 {{- $iso8601 := "2006-01-02T15:04:05-07:00" -}}
 <script type="application/ld+json">
@@ -10,7 +10,7 @@
       "@id": "{{.Permalink}}"
     },
     "isFamilyFriendly": "true",
-    "headline": "{{.Title | title}}",
+    "headline": "{{.Title | title | markdownify }}",
     "genre" : [ {{ range $index, $tag := .Params.tags }}{{ if $index }}, {{ end }}"{{ $tag }}" {{ end }}],
     "wordCount" : "{{ .WordCount }}",
     "image": {{ if .Params.images }}[{{ range $i, $e := .Params.images }}{{ if $i }}, {{ end }}{{ $e | printf "https://r-insight.com/img/%s" }}{{ end }}]{{ else}}{{.Site.Params.logo | absURL }}{{ end }},
@@ -57,7 +57,7 @@
                 </q-img>{{ end }}
                 {{ with .Params.caption}}<figcaption class="text-caption text-right q-layout-padding q-py-none">{{.}}</figcaption>{{end}}
                 {{ with .Params.images }}</figure>{{ end }}
-            <h1>{{.Title | title}}</h1>
+            <h1>{{.Title | title | markdownify }}</h1>
 
             <q-breadcrumbs separator="." style="font-size: 14px;" gutter="xs" class="q-mb-lg">
             {{ with .Params.interest}}
@@ -65,10 +65,10 @@
             <q-breadcrumbs-el href="{{.Permalink}}" class="text-weight-bold" style="color: inherit;" label="{{.Title | upper}}"></q-breadcrumbs-el>{{end}}{{end}}
             {{ range .Params.channel}}
             {{- with $.Site.GetPage "taxonomyTerm" (printf "channel/%s" (urlize .)) }}
-            <q-breadcrumbs-el href="{{.Permalink}}" style="color: inherit;" label="{{.Title | title}}"></q-breadcrumbs-el>{{end}}{{end}}
+            <q-breadcrumbs-el href="{{.Permalink}}" style="color: inherit;" label="{{.Title | title | markdownify }}"></q-breadcrumbs-el>{{end}}{{end}}
             {{ range .Params.tags}}
             {{- with $.Site.GetPage "taxonomyTerm" (printf "tags/%s" (urlize .)) }}
-            <q-breadcrumbs-el href="{{.Permalink}}" style="color: inherit;" label="{{ .Title | title}}"></q-breadcrumbs-el>{{end}}{{end}}
+            <q-breadcrumbs-el href="{{.Permalink}}" style="color: inherit;" label="{{ .Title | title | markdownify }}"></q-breadcrumbs-el>{{end}}{{end}}
             </q-breadcrumbs>
             {{ partialCached "ads.html" . }}
         {{.Content}}
@@ -82,7 +82,7 @@
                 <q-img no-spinner src="/icons/facebook.svg" alt="facebook"></q-img>
               </q-avatar>
             </q-fab-action>
-            <q-fab-action aria-label="share twitter" flat :color="$q.dark.isActive ? 'white' : 'dark'" @click="open('https://twitter.com/share?url={{.Permalink}}&text={{.Title|title}}')" :text-color="$q.dark.isActive ? 'dark' : 'white'">
+            <q-fab-action aria-label="share twitter" flat :color="$q.dark.isActive ? 'white' : 'dark'" @click="open('https://twitter.com/share?url={{.Permalink}}&text={{.Title|title|markdownify}}')" :text-color="$q.dark.isActive ? 'dark' : 'white'">
               <q-avatar size="42px">
                 <q-img no-spinner src="/icons/twitter.webp" alt="twitter"></q-img>
               </q-avatar>
