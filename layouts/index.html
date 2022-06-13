@@ -1,15 +1,15 @@
 {{ define "title" }}{{ .Title  | title | markdownify  }} | {{ .Site.Title }}{{ end }}
 {{ define "main" }}
 <template id="content">
-    <q-page padding style="padding-bottom: 50px;">
+    <q-page padding style="padding-bottom: 76px;">
         {{.Content}}
         {{ $targetPage := where .Site.RegularPages.ByLastmod.Reverse "Type" "article" }}
         {{ $paginator := .Paginate $targetPage }}
         {{ range $paginator.Pages }}
-        <article class="relative-position">
+        <article :class="$q.screen.lt.md ? 'relative-position qpage-nopadding q-nopadding-top' : 'relative-position'">
             <div class="row">
-                <div class="col-12 col-md-7 q-pa-sm">
-                    <h1 class="h5 q-mb-sm gt-sm relative-position">{{.Title | title | markdownify}}<a href="{{.Permalink}}" style="z-index: 2;" class="absolute-full" aria-label="read more"></a></h1>
+                <div :class="$q.screen.lt.md ? 'col-12 col-md-7 q-pa-sm order-last' : 'col-12 col-md-7 q-pa-sm'">
+                    <h1 class="h5 q-mb-sm  relative-position">{{.Title | title | markdownify}}<a href="{{.Permalink}}" style="z-index: 2;" class="absolute-full" aria-label="read more"></a></h1>
                     <q-item-label :lines="3" class="q-mb-sm gt-sm non-selectable">{{.Params.description | markdownify}}</q-item-label>
                     <div>
                         <q-breadcrumbs separator="" style="font-size: 12px;" gutter="xs">
@@ -25,18 +25,13 @@
                         </q-breadcrumbs>
                     </div>
                 </div>
-                <div class="col-12 col-md-5 relative-position">
+                <div :class="$q.screen.lt.md ? 'col-12 col-md-5 relative-position' : 'col-12 col-md-5 relative-position'">
                     <q-img loading="lazy" no-spinner src="https://i0.wp.com/r-insight.com/img/{{ index (.Params.images) 0 }}" 
                     srcset="https://i0.wp.com/r-insight.com/img/{{ index (.Params.images) 0 }}?w=350 590w" sizes="(min-width: 640px) 590px, 100vw"
                     crossorigin="anonymous" :ratio="1200/675">
                         <template v-slot:loading>
                             <q-skeleton class="fit" square></q-skeleton>
                         </template>
-                        <div class="absolute-full text-subtitle2 flex flex-center items-end lt-md">
-                            <div class="absolute-bottom q-pa-sm full-width">
-                                <span class="h5 text-weight-bold">{{.Title | title | markdownify }}</span>
-                            </div>
-                        </div>
                     </q-img>
                     <a href="{{.Permalink}}" class="absolute-full" aria-label="read more"></a>
                 </div>

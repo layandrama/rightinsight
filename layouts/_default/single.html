@@ -1,7 +1,7 @@
 {{ define "title" }}{{ .Title  | title | markdownify  }} | {{ .Site.Title }}{{ end }}
 {{ define "main" }}
 <template id="content">
-    <q-page padding style="padding-bottom: 50px;">
+    <q-page padding style="padding-bottom: 76px;">
         {{.Content}}
         <q-page-scroller position="bottom-right" :scroll-offset="350" :offset="[18, 18]">
             <q-btn fab-mini glossy icon="keyboard_arrow_up" :color="$q.dark.isActive ? 'white' : 'dark'" :text-color="$q.dark.isActive ? 'dark' : 'white'" aria-label="back to top"></q-btn>
