@@ -59,6 +59,7 @@
                 {{ with .Params.images }}</figure>{{ end }}
             <h1>{{.Title | title | markdownify }}</h1>
 
+            {{with .Params.description}}<p>{{.}}</p>{{end}}
             <q-breadcrumbs separator="." style="font-size: 14px;" gutter="xs" class="q-mb-lg">
             {{ with .Params.interest}}
             {{- with $.Site.GetPage "taxonomyTerm" (printf "interest/%s" (urlize .)) }}
